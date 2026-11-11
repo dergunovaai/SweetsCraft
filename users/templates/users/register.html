@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация | SweetCraft</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5eee6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .registration {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            width: 350px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #70452c;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #70452c;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="registration">
+
+    <h1>SweetCraft</h1>
+    <h3>Регистрация</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Зарегистрироваться
+        </button>
+        <p style="text-align: center;">
+    Уже есть аккаунт?
+    <a href="{% url 'login' %}">Войти</a>
+</p>
+    </form>
+
+</div>
+
+</body>
+</html>
