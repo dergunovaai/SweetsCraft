@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth import logout
+from .models import Profile
+from .forms import ProfileForm
 
 
 def register(request):
@@ -32,10 +34,6 @@ def user_login(request):
         form = AuthenticationForm()
 
     return render(request, 'users/login.html', {'form': form})
-
-
-from .models import Profile
-from .forms import ProfileForm
 
 
 def profile(request):
