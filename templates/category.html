@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{ category.name }}</h1>
+
+{% if category.description %}
+    <p>{{ category.description }}</p>
+{% endif %}
+
+<style>
+    .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+    }
+
+    .product-card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-card img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .product-card a {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background: #ffb6c1;
+        color: #333;
+        text-decoration: none;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="products">
+
+    {% for product in products %}
+
+        <div class="product-card">
+
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% endif %}
+
+            <h2>{{ product.name }}</h2>
+
+            <p>{{ product.description }}</p>
+
+            <a href="{% url 'product_detail' product.slug %}">
+                Подробнее
+            </a>
+
+        </div>
+
+    {% empty %}
+
+        <p>В этой категории пока нет товаров.</p>
+
+    {% endfor %}
+
+</div>
+
+<a href="{% url 'catalog' %}">Вернуться в каталог</a>
+
+{% endblock %}

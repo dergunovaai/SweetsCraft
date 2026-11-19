@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Наш каталог</h1>
+
+<p>Выберите категорию товаров:</p>
+
+<div class="categories">
+
+    {% for category in categories %}
+
+        <div class="category-card">
+            <h2>{{ category.name }}</h2>
+
+            {% if category.description %}
+                <p>{{ category.description }}</p>
+            {% endif %}
+
+            <a href="{% url 'category' category.slug %}">
+                Смотреть товары
+            </a>
+        </div>
+
+    {% empty %}
+
+        <p>Категории пока не добавлены.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

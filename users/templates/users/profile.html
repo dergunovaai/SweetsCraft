@@ -1,0 +1,52 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет — SweetsCraft</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <h1>Мой личный кабинет</h1>
+
+    <div class="profile-avatar">
+        {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="Аватар">
+        {% else %}
+            <div class="default-avatar">👤</div>
+        {% endif %}
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <p>
+            <label for="{{ form.nickname.id_for_label }}">Никнейм</label>
+            {{ form.nickname }}
+        </p>
+
+        <p>
+            <label for="{{ form.birth_date.id_for_label }}">Дата рождения</label>
+            {{ form.birth_date }}
+        </p>
+
+        <p>
+            <label for="{{ form.avatar.id_for_label }}">Аватар</label>
+            {{ form.avatar }}
+        </p>
+
+        <button type="submit">Сохранить изменения</button>
+    </form>
+
+    <form action="{% url 'logout' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Выйти из аккаунта</button>
+    </form>
+
+    <a href="{% url 'index' %}">Вернуться на главную</a>
+
+</body>
+</html>

@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="ru">
@@ -63,28 +64,5 @@
         {% block content %}
         {% endblock %}
     </main>
-
-    <script>
-        const menuButton = document.getElementById('menu-button');
-        const sideMenu = document.getElementById('side-menu');
-
-        const catalogToggle = document.getElementById('catalog-toggle');
-        const catalogSubmenu = document.getElementById('catalog-submenu');
-
-        menuButton.addEventListener('click', function () {
-            sideMenu.classList.toggle('active');
-
-            if (sideMenu.classList.contains('active')) {
-                menuButton.textContent = '✕';
-            } else {
-                menuButton.textContent = '☰';
-            }
-        });
-
-        catalogToggle.addEventListener('click', function () {
-            catalogSubmenu.classList.toggle('active');
-        });
-    </script>
-
 </body>
 </html>
