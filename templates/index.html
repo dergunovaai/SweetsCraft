@@ -1,6 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Добро пожаловать в SweetCraft!</h2>
-    <p>Здесь скоро появится каталог наших тортов.</p>
+
+<div class="welcome">
+
+    <h1>Добро пожаловать в SweetsCraft! 🍰</h1>
+
+    <p>
+        Откройте для себя мир вкусных тортов,
+        нежных десертов и любимых напитков.
+    </p>
+
+    <a href="{% url 'catalog' %}" class="catalog-button">
+        Перейти в каталог
+    </a>
+
+</div>
+
 {% endblock %}
