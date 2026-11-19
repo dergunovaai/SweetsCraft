@@ -9,9 +9,15 @@
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 </head>
 <body>
-    <header>
-        <button class="menu-button" id="menu-button">☰</button>
 
+    <input type="checkbox" id="menu-checkbox" class="menu-checkbox">
+
+    <label for="menu-checkbox" class="menu-button">
+        <span class="open-icon">☰</span>
+        <span class="close-icon">✕</span>
+    </label>
+
+    <header>
         <a href="{% url 'index' %}">🍰 SweetsCraft</a>
 
         <nav>
@@ -36,14 +42,16 @@
         </nav>
     </header>
 
-    <aside class="side-menu" id="side-menu">
+    <aside class="side-menu">
         <h2>Меню</h2>
 
-        <button class="catalog-toggle" id="catalog-toggle">
-            Каталог <span>⌄</span>
-        </button>
+        <input type="checkbox" id="catalog-checkbox" class="catalog-checkbox">
 
-        <div class="catalog-submenu" id="catalog-submenu">
+        <label for="catalog-checkbox" class="catalog-toggle">
+        Каталог <span class="catalog-arrow">⌄</span>
+        </label>
+
+        <div class="catalog-submenu">
             <a href="{% url 'category' 'cakes' %}">Торты</a>
             <a href="{% url 'category' 'desserts' %}">Десерты</a>
             <a href="{% url 'category' 'coffee' %}">Кофе</a>
@@ -64,5 +72,6 @@
         {% block content %}
         {% endblock %}
     </main>
+
 </body>
 </html>
