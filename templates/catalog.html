@@ -1,33 +1,32 @@
 {% extends 'base.html' %}
 
+{% block title %}Каталог — SweetCraft{% endblock %}
+
 {% block content %}
+    <section class="catalog-hub" aria-labelledby="catalog-hub-heading">
+        <p class="eyebrow">SweetCraft / Каталог</p>
+        <h1 id="catalog-hub-heading">Выберите раздел</h1>
+        <p>Торты для праздника, маленькие десерты к кофе и напитки для уютного вечера.</p>
+    </section>
 
-<h1>Наш каталог</h1>
-
-<p>Выберите категорию товаров:</p>
-
-<div class="categories">
-
-    {% for category in categories %}
-
-        <div class="category-card">
-            <h2>{{ category.name }}</h2>
-
-            {% if category.description %}
-                <p>{{ category.description }}</p>
-            {% endif %}
-
-            <a href="{% url 'category' category.slug %}">
-                Смотреть товары
-            </a>
-        </div>
-
-    {% empty %}
-
-        <p>Категории пока не добавлены.</p>
-
-    {% endfor %}
-
-</div>
-
+    <section class="category-grid" aria-label="Разделы каталога">
+        <a class="category-tile category-tile--cakes" href="{% url 'cakes' %}">
+            <span class="category-tile__number">01</span>
+            <span class="category-tile__title">Торты</span>
+            <span class="category-tile__text">Чизкейки, медовики и авторские бисквиты</span>
+            <span class="category-tile__meta">{{ cake_count }} вкусов <b aria-hidden="true">→</b></span>
+        </a>
+        <a class="category-tile category-tile--desserts" href="{% url 'desserts' %}">
+            <span class="category-tile__number">02</span>
+            <span class="category-tile__title">Десерты</span>
+            <span class="category-tile__text">Капкейки, брауни и десерты в стакане</span>
+            <span class="category-tile__meta">{{ dessert_count }} десертов <b aria-hidden="true">→</b></span>
+        </a>
+        <a class="category-tile category-tile--drinks" href="{% url 'drinks' %}">
+            <span class="category-tile__number">03</span>
+            <span class="category-tile__title">Напитки</span>
+            <span class="category-tile__text">Кофе, какао, матча и свежие лимонады</span>
+            <span class="category-tile__meta">{{ drink_count }} напитка <b aria-hidden="true">→</b></span>
+        </a>
+    </section>
 {% endblock %}
