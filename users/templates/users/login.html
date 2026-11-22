@@ -2,63 +2,31 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Вход | SweetsCraft</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5eee6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        .login {
-            background: white;
-            padding: 35px;
-            border-radius: 15px;
-            width: 350px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #70452c;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0 15px;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #70452c;
-            color: white;
-            border: none;
-            border-radius: 7px;
-            cursor: pointer;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Вход | SweetCraft</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 </head>
 <body>
-    <div class="login">
-        <h1>SweetsCraft</h1>
-        <h3>Вход в аккаунт</h3>
-
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-
-            <button type="submit">Войти</button>
-            <p style="text-align: center;">
-    Нет аккаунта?
-    <a href="{% url 'register' %}">Зарегистрироваться</a>
-</p>
-        </form>
-    </div>
+    <main class="account-shell">
+        <section class="account-card">
+            <p class="account-brand">SweetCraft</p>
+            <h1>Войти</h1>
+            <p class="account-intro">Войдите в аккаунт, чтобы продолжить.</p>
+            <form class="account-form" method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}<div class="account-errors">{{ form.non_field_errors }}</div>{% endif %}
+                {% for field in form %}
+                    <p>
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {{ field.errors }}
+                    </p>
+                {% endfor %}
+                <button type="submit">Войти</button>
+            </form>
+            <p class="account-switch">Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+        </section>
+    </main>
 </body>
 </html>

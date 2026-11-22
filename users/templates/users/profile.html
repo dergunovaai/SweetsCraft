@@ -5,48 +5,39 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Личный кабинет — SweetsCraft</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 </head>
 <body>
-
-    <h1>Мой личный кабинет</h1>
-
-    <div class="profile-avatar">
-        {% if profile.avatar %}
-            <img src="{{ profile.avatar.url }}" alt="Аватар">
-        {% else %}
-            <div class="default-avatar">👤</div>
-        {% endif %}
-    </div>
-
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        <p>
-            <label for="{{ form.nickname.id_for_label }}">Никнейм</label>
-            {{ form.nickname }}
-        </p>
-
-        <p>
-            <label for="{{ form.birth_date.id_for_label }}">Дата рождения</label>
-            {{ form.birth_date }}
-        </p>
-
-        <p>
-            <label for="{{ form.avatar.id_for_label }}">Аватар</label>
-            {{ form.avatar }}
-        </p>
-
-        <button type="submit">Сохранить изменения</button>
-    </form>
-
-    <form action="{% url 'logout' %}" method="POST">
-        {% csrf_token %}
-        <button type="submit">Выйти из аккаунта</button>
-    </form>
-
-    <a href="{% url 'index' %}">Вернуться на главную</a>
-
+    <main class="account-shell">
+        <section class="account-card">
+            <p class="account-brand">SweetCraft / аккаунт</p>
+            <h1>Личный кабинет</h1>
+            <div class="account-avatar">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="Аватар {{ profile.nickname|default:request.user.username }}">
+                {% else %}
+                    <div class="account-placeholder" aria-hidden="true">{{ profile.nickname|default:request.user.username|first|upper }}</div>
+                {% endif %}
+            </div>
+            <form class="account-form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                    <p>
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {{ field.errors }}
+                    </p>
+                {% endfor %}
+                <button type="submit">Сохранить изменения</button>
+            </form>
+            <form class="account-secondary" action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Выйти из аккаунта</button>
+            </form>
+            <a class="account-home" href="{% url 'index' %}">Вернуться на главную</a>
+        </section>
+    </main>
 </body>
 </html>
