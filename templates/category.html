@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} — SweetCraft{% endblock %}
+
+{% block content %}
+    <div class="category-page">
+        <a class="back-link" href="{% url 'catalog' %}">
+            <span aria-hidden="true">←</span> {{ back_label }}
+        </a>
+        <section class="category-heading" aria-labelledby="category-heading">
+            <div>
+                <p class="eyebrow">{{ eyebrow }}</p>
+                <h1 id="category-heading">{{ title }}</h1>
+            </div>
+            {% if description %}<p>{{ description }}</p>{% endif %}
+        </section>
+
+        <div class="cakes-grid">
+            {% for product in products %}
+                {% include 'partials/product_card.html' with product=product detail_url=detail_url only %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

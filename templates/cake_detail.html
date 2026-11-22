@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ cake.name }} — SweetCraft{% endblock %}
+
+{% block content %}
+    <div class="detail-page">
+        <a class="back-link" href="{% if detail_kind == 'cake' %}{% url 'cakes' %}{% elif detail_kind == 'dessert' %}{% url 'desserts' %}{% else %}{% url 'drinks' %}{% endif %}">
+            <span aria-hidden="true">←</span> Вернуться в каталог
+        </a>
+
+        <div class="detail-layout">
+            <div class="detail-media{% if cake.transparent %} detail-media--transparent{% endif %}">
+                <img src="{% static cake.image %}" alt="{{ cake.name }}">
+                <span class="detail-media__label">{{ cake.category }}</span>
+            </div>
+
+            <article class="detail-content">
+                <p class="eyebrow">SweetCraft / {{ cake.category }}</p>
+                <h1>{{ cake.name }}</h1>
+                <p class="detail-content__intro">Десерт ручной работы из коллекции SweetCraft. Готовим небольшими партиями, чтобы сохранить свежесть, аромат и точную текстуру каждого слоя.</p>
+
+                <div class="detail-prices{% if not cake.price_full %} detail-prices--single{% endif %}" aria-label="Цены">
+                    <div class="detail-price">
+                        <span>{% if cake.price_full %}Порция{% else %}Цена{% endif %}</span>
+                        <strong>{{ cake.price_piece }}</strong>
+                        {% if not cake.price_full %}<small>/ {{ cake.price_unit }}</small>{% endif %}
+                    </div>
+                    {% if cake.price_full %}
+                        <div class="detail-price detail-price--full">
+                            <span>Целый десерт</span>
+                            <strong>{{ cake.price_full }}</strong>
+                            <small>{{ cake.portion }}</small>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <section class="detail-section" aria-labelledby="composition-heading">
+                    <h2 id="composition-heading">Состав</h2>
+                    <p>{{ cake.composition }}</p>
+                    {% if cake.price_note %}<p class="detail-note">{{ cake.price_note }}</p>{% endif %}
+                </section>
+
+                <section class="detail-section" aria-labelledby="nutrition-heading">
+                    <h2 id="nutrition-heading">Пищевая ценность на 100 г</h2>
+                    <dl class="nutrition-grid">
+                        <div><dt>Калорийность</dt><dd>{{ cake.calories }}</dd></div>
+                        <div><dt>Белки</dt><dd>{{ cake.proteins }}</dd></div>
+                        <div><dt>Жиры</dt><dd>{{ cake.fats }}</dd></div>
+                        <div><dt>Углеводы</dt><dd>{{ cake.carbs }}</dd></div>
+                    </dl>
+                </section>
+
+                <a class="detail-action" href="{% if detail_kind == 'cake' %}{% url 'cakes' %}{% elif detail_kind == 'dessert' %}{% url 'desserts' %}{% else %}{% url 'drinks' %}{% endif %}">Посмотреть другие вкусы <span aria-hidden="true">→</span></a>
+            </article>
+        </div>
+    </div>
+{% endblock %}
