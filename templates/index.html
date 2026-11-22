@@ -1,6 +1,23 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}SweetCraft — авторские торты{% endblock %}
 
 {% block content %}
-    <h2>Добро пожаловать в SweetCraft!</h2>
-    <p>Здесь скоро появится каталог наших тортов.</p>
+    <section class="catalog-hero" aria-labelledby="catalog-heading">
+        <div class="catalog-hero__copy">
+            <p class="eyebrow">Домашняя кондитерская</p>
+            <h1 id="catalog-heading">Сладкие моменты, которые хочется разделить</h1>
+            <p class="catalog-hero__lead">Нежные текстуры, ягодные акценты и аккуратная ручная работа. Найдите десерт для своего повода.</p>
+        </div>
+        <div class="catalog-hero__visual">
+            <span class="catalog-hero__shape catalog-hero__shape--pink" aria-hidden="true"></span>
+            <span class="catalog-hero__shape catalog-hero__shape--mint" aria-hidden="true"></span>
+            <div class="catalog-hero__image-frame">
+                <img src="{% static cakes.0.image %}" alt="{{ cakes.0.name }}">
+                <span class="catalog-hero__badge">SweetCraft</span>
+            </div>
+        </div>
+    </section>
+
 {% endblock %}

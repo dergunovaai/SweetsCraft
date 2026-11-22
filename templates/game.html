@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
 
+{% block title %}Бонусная игра — SweetCraft{% endblock %}
+
 {% block content %}
-    <h2>Собери свой торт!</h2>
-    <p>Здесь будет интерактивная игра.</p>
+    <section class="game-page" aria-labelledby="game-heading">
+        <p class="eyebrow">SweetCraft / Бонусы</p>
+        <h1 id="game-heading">Бонусная игра</h1>
+        <p>Соберите свой торт и получите бонусы для следующего заказа.</p>
+        <div class="game-panel">
+            <span class="game-panel__number">+100</span>
+            <div>
+                <h2>Собери свой торт</h2>
+                <p>Выберите основу, крем и декор — игра скоро откроется.</p>
+            </div>
+        </div>
+    </section>
 {% endblock %}
