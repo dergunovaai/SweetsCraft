@@ -3,25 +3,66 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>SweetCraft - Магазин тортов</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Авторские торты, десерты и напитки SweetCraft">
+    <title>{% block title %}SweetCraft — кондитерская{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <header>
-        <a href="{% url 'index' %}">🍰 SweetCraft</a>
-        <nav>
-            <a href="{% url 'index' %}">Главная</a>
-            <a href="{% url 'game' %}">Играть</a>
-        </nav>
+    <header class="site-header">
+        <div class="page-shell site-header__inner">
+            <a class="brand" href="{% url 'index' %}" aria-label="SweetCraft, на главную">
+                <span class="brand__mark" aria-hidden="true">S</span>
+                <span class="brand__text">SweetCraft<small>кондитерская</small></span>
+            </a>
+            <nav class="site-nav" aria-label="Основная навигация">
+                <a class="site-nav__link" href="{% url 'catalog' %}">Каталог</a>
+                <a class="site-nav__link" href="{% url 'game' %}">Бонусная игра</a>
+            </nav>
+            <div class="header-actions">
+                {% if user.is_authenticated %}
+                    <a class="header-action" href="{% url 'logout' %}">Выйти</a>
+                {% else %}
+                    <a class="header-action" href="{% url 'login' %}">Войти</a>
+                    <a class="header-action header-action--register" href="{% url 'register' %}">Регистрация</a>
+                {% endif %}
+                <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="side-menu" aria-expanded="false" title="Открыть меню">
+                    <span class="menu-toggle__icon" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span>Меню</span>
+                </button>
+            </div>
+        </div>
     </header>
 
-    <main>
-        {% block content %}
-        {% endblock %}
+    <div class="side-menu-backdrop" id="side-menu-backdrop" hidden></div>
+    <aside class="side-menu" id="side-menu" aria-label="Меню магазина" aria-hidden="true">
+        <div class="side-menu__header">
+            <div>
+                <p class="eyebrow">SweetCraft</p>
+                <h2>Меню</h2>
+            </div>
+            <button class="side-menu__close" id="menu-close" type="button" aria-label="Закрыть меню" title="Закрыть меню">×</button>
+        </div>
+        <nav class="side-menu__nav" aria-label="Меню магазина">
+            <a class="side-menu__link" href="{% url 'catalog' %}" data-menu-link>Каталог</a>
+            <div class="side-menu__catalog-links">
+                <a href="{% url 'cakes' %}" data-menu-link>Торты</a>
+                <a href="{% url 'desserts' %}" data-menu-link>Десерты</a>
+                <a href="{% url 'drinks' %}" data-menu-link>Напитки</a>
+            </div>
+            <a class="side-menu__link" href="{% url 'game' %}" data-menu-link>Бонусная игра</a>
+        </nav>
+    </aside>
+
+    <main class="page-shell page-main">
+        {% block content %}{% endblock %}
     </main>
 
-    <footer>
-        <p>&copy; 2024 Сладкая Фабрика</p>
+    <footer class="site-footer">
+        <div class="page-shell site-footer__inner">
+            <p>SweetCraft</p>
+        </div>
     </footer>
+    <script src="{% static 'js/menu.js' %}"></script>
 </body>
 </html>
