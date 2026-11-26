@@ -1,87 +1,30 @@
-
 {% extends 'base.html' %}
 {% load static %}
-{% block extra_css %}
 
-<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% block title %}Войти — SweetsCraft{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock %}
 
-{% block title %}Личный кабинет — SweetsCraft{% endblock %}
-
 {% block content %}
-<section class="profile-page">
+    <section class="auth-page" aria-labelledby="login-heading">
+        <div class="auth-card">
+            <p class="eyebrow">SweetsCraft / Аккаунт</p>
+            <h1 id="login-heading">Войти</h1>
+            <p class="auth-card__intro">Сохраняйте любимые вкусы и следите за бонусами.</p>
 
-    <div class="profile-heading">
-        <p class="eyebrow">ВАШ ПРОФИЛЬ</p>
-        <h1>Личный кабинет</h1>
-        <p>Здесь можно посмотреть и изменить свои данные</p>
-    </div>
-
-    <div class="profile-card">
-
-        <div class="profile-card__top">
-            <div class="profile-avatar">
-                {% if profile.avatar %}
-                    <img src="{{ profile.avatar.url }}" alt="Аватар пользователя">
-                {% else %}
-                    <div class="default-avatar">👤</div>
-                {% endif %}
-            </div>
-
-            <div class="profile-card__info">
-                <p class="eyebrow">ДОБРО ПОЖАЛОВАТЬ</p>
-                <h2>{{ profile.nickname|default:user.username }}</h2>
-                <p>Ваш личный уголок в SweetsCraft</p>
-            </div>
-        </div>
-
-        <div class="profile-divider"></div>
-
-        <form method="POST" enctype="multipart/form-data" class="profile-form">
-            {% csrf_token %}
-
-            <h3>Личные данные</h3>
-
-            {% if form.non_field_errors %}
-                <div class="profile-errors">{{ form.non_field_errors }}</div>
-            {% endif %}
-
-            <div class="profile-field">
-                <label for="{{ form.nickname.id_for_label }}">Никнейм</label>
-                {{ form.nickname }}
-                {{ form.nickname.errors }}
-            </div>
-
-            <div class="profile-field">
-                <label for="{{ form.birth_date.id_for_label }}">Дата рождения</label>
-                {{ form.birth_date }}
-                {{ form.birth_date.errors }}
-            </div>
-
-            <div class="profile-field">
-                <label for="{{ form.avatar.id_for_label }}">Фотография профиля</label>
-                {{ form.avatar }}
-                {{ form.avatar.errors }}
-            </div>
-
-            <button type="submit" class="profile-save">
-                Сохранить изменения
-            </button>
-        </form>
-
-        <div class="profile-divider"></div>
-
-        <div class="profile-footer">
-            <p>Хотите завершить сеанс?</p>
-
-            <form action="{% url 'logout' %}" method="POST">
+            <form class="auth-form" method="post">
                 {% csrf_token %}
-                <button type="submit" class="profile-logout">
-                    Выйти из аккаунта
+                {{ form.as_p }}
+                <button class="detail-action auth-form__submit" type="submit">
+                    Войти <span aria-hidden="true">→</span>
                 </button>
             </form>
-        </div>
 
-    </div>
-</section>
+            <p class="auth-card__footer">
+                Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a>
+            </p>
+        </div>
+    </section>
 {% endblock %}

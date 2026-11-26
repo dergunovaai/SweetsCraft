@@ -88,7 +88,7 @@ def login_view(request):
     if request.method == 'POST' and form.is_valid():
         auth_login(request, form.get_user())
         return redirect('index')
-    return render(request, 'auth/login.html', {'form': form})
+    return render(request, 'users/login.html', {'form': form})
 
 
 def register_view(request):
@@ -97,7 +97,7 @@ def register_view(request):
         user = form.save()
         auth_login(request, user)
         return redirect('index')
-    return render(request, 'auth/register.html', {'form': form})
+    return render(request, 'users/register.html', {'form': form})
 
 
 def logout_view(request):
