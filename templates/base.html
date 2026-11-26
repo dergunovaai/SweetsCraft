@@ -5,52 +5,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Авторские торты, десерты и напитки SweetCraft">
-    <title>{% block title %}SweetCraft — кондитерская{% endblock %}</title>
+    <title>{% block title %}SweetsCraft — кондитерская{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
+
+    <input type="checkbox" id="menu-checkbox" class="menu-checkbox">
+
     <header class="site-header">
         <div class="page-shell site-header__inner">
+
             <a class="brand" href="{% url 'index' %}" aria-label="SweetCraft, на главную">
                 <span class="brand__mark" aria-hidden="true">S</span>
-                <span class="brand__text">SweetCraft<small>кондитерская</small></span>
+                <span class="brand__text">SweetsCraft<small>кондитерская</small></span>
             </a>
+
             <nav class="site-nav" aria-label="Основная навигация">
                 <a class="site-nav__link" href="{% url 'catalog' %}">Каталог</a>
                 <a class="site-nav__link" href="{% url 'game' %}">Бонусная игра</a>
             </nav>
+
             <div class="header-actions">
                 {% if user.is_authenticated %}
-                    <a class="header-action" href="{% url 'logout' %}">Выйти</a>
+                    <a class="header-action profile-header-link" href="{% url 'profile' %}">
+                        <span class="header-avatar">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="Аватар">
+                            {% else %}
+                                <span class="header-avatar__placeholder">♡</span>
+                            {% endif %}
+                        </span>
+                        <span>Личный кабинет</span>
+                    </a>
                 {% else %}
                     <a class="header-action" href="{% url 'login' %}">Войти</a>
                     <a class="header-action header-action--register" href="{% url 'register' %}">Регистрация</a>
                 {% endif %}
-                <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="side-menu" aria-expanded="false" title="Открыть меню">
-                    <span class="menu-toggle__icon" aria-hidden="true"><i></i><i></i><i></i></span>
-                    <span>Меню</span>
-                </button>
+
+                <label class="menu-toggle" for="menu-checkbox">
+                    <span class="menu-toggle__icon" aria-hidden="true">
+                        <i></i><i></i><i></i>
+                    </span>
+                    <span class="menu-toggle__text menu-toggle__text--open">Меню</span>
+                    <span class="menu-toggle__text menu-toggle__text--close">Закрыть</span>
+                </label>
             </div>
+
         </div>
     </header>
 
-    <div class="side-menu-backdrop" id="side-menu-backdrop" hidden></div>
-    <aside class="side-menu" id="side-menu" aria-label="Меню магазина" aria-hidden="true">
+    <label class="side-menu-backdrop" for="menu-checkbox"></label>
+
+    <aside class="side-menu" aria-label="Меню магазина">
+
         <div class="side-menu__header">
             <div>
-                <p class="eyebrow">SweetCraft</p>
+                <p class="eyebrow">SweetsCraft</p>
                 <h2>Меню</h2>
             </div>
-            <button class="side-menu__close" id="menu-close" type="button" aria-label="Закрыть меню" title="Закрыть меню">×</button>
         </div>
+
         <nav class="side-menu__nav" aria-label="Меню магазина">
-            <a class="side-menu__link" href="{% url 'catalog' %}" data-menu-link>Каталог</a>
+
+            <a class="side-menu__link" href="{% url 'catalog' %}">
+                Каталог
+            </a>
+
             <div class="side-menu__catalog-links">
-                <a href="{% url 'cakes' %}" data-menu-link>Торты</a>
-                <a href="{% url 'desserts' %}" data-menu-link>Десерты</a>
-                <a href="{% url 'drinks' %}" data-menu-link>Напитки</a>
+                <a href="{% url 'cakes' %}">Торты</a>
+                <a href="{% url 'desserts' %}">Десерты</a>
+                <a href="{% url 'drinks' %}">Напитки</a>
             </div>
-            <a class="side-menu__link" href="{% url 'game' %}" data-menu-link>Бонусная игра</a>
+
+            <a class="side-menu__link" href="{% url 'game' %}">
+                Бонусная игра
+            </a>
+
+            {% if user.is_authenticated %}
+                <a class="side-menu__link" href="{% url 'profile' %}">
+                    Личный кабинет
+                </a>
+
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="side-menu__link logout-link">
+                        Выйти
+                    </button>
+                </form>
+            {% else %}
+                <a class="side-menu__link" href="{% url 'login' %}">
+                    Войти
+                </a>
+
+                <a class="side-menu__link" href="{% url 'register' %}">
+                    Регистрация
+                </a>
+            {% endif %}
+
         </nav>
     </aside>
 
@@ -60,9 +114,9 @@
 
     <footer class="site-footer">
         <div class="page-shell site-footer__inner">
-            <p>SweetCraft</p>
+            <p>SweetsCraft</p>
         </div>
     </footer>
-    <script src="{% static 'js/menu.js' %}"></script>
+
 </body>
 </html>

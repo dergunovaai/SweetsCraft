@@ -1,0 +1,349 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Личный кабинет — SweetsCraft{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css"
+>
+{% endblock %}
+
+{% block content %}
+<section class="profile-page">
+
+    <div class="profile-heading">
+        <p class="eyebrow">ВАШ ПРОФИЛЬ</p>
+        <h1>Личный кабинет</h1>
+        <p>Здесь можно посмотреть и изменить свои данные</p>
+    </div>
+
+    <div class="profile-card">
+
+        <div class="profile-card__top">
+            <div class="profile-avatar">
+                <img
+                    src="{% if profile.avatar %}{{ profile.avatar.url }}{% endif %}"
+                    alt=""
+                    {% if not profile.avatar %}hidden{% endif %}
+                    onerror="this.hidden = true; this.nextElementSibling.hidden = false;"
+                >
+
+                <div class="default-avatar" {% if profile.avatar %}hidden{% endif %}>
+                    <span>♡</span>
+                </div>
+            </div>
+
+            <div class="profile-card__info">
+                <p class="eyebrow">ДОБРО ПОЖАЛОВАТЬ</p>
+                <h2>{{ profile.nickname|default:user.username }}</h2>
+                <p>Ваш личный уголок в SweetsCraft</p>
+            </div>
+        </div>
+
+        <div class="profile-divider"></div>
+
+        <form method="POST" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+
+            <h3>Личные данные</h3>
+
+            {% if form.non_field_errors %}
+                <div class="profile-errors">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="profile-field">
+                <label for="{{ form.nickname.id_for_label }}">Никнейм</label>
+                {{ form.nickname }}
+                {{ form.nickname.errors }}
+            </div>
+
+            <div class="profile-field">
+                <label for="{{ form.birth_date.id_for_label }}">Дата рождения</label>
+                {{ form.birth_date }}
+                {{ form.birth_date.errors }}
+            </div>
+
+            <div class="profile-field">
+                <label for="{{ form.avatar.id_for_label }}">Фотография профиля</label>
+
+                <div class="avatar-file-row">
+                    {{ form.avatar }}
+
+                    <span id="avatar-file-name">Файл не выбран</span>
+
+                    <button
+                        type="button"
+                        id="clear-avatar-file"
+                        class="avatar-trash"
+                        title="Убрать выбранный файл"
+                        aria-label="Убрать выбранный файл"
+                        hidden
+                    >
+                        🗑
+                    </button>
+                </div>
+
+                {{ form.avatar.errors }}
+
+                {% if profile.avatar %}
+                    <button
+                        type="submit"
+                        name="delete_avatar"
+                        value="1"
+                        formnovalidate
+                        class="avatar-delete"
+                        onclick="return confirm('Удалить текущую фотографию профиля?')"
+                    >
+                        🗑 Удалить текущую фотографию
+                    </button>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="profile-save">
+                Сохранить изменения
+            </button>
+        </form>
+
+        <div class="profile-divider"></div>
+
+        <div class="profile-footer">
+            <p>Хотите завершить сеанс?</p>
+
+            <form action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="profile-logout">
+                    Выйти из аккаунта
+                </button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+<!-- Окно обрезки фотографии -->
+
+<div class="crop-modal" id="crop-modal" hidden>
+    <div class="crop-modal__content">
+        <h3>Обрезка фотографии</h3>
+        <p>Передвигай фотографию и настрой масштаб</p>
+
+        <div class="crop-container">
+            <img id="crop-image" src="" alt="Обрезка фотографии">
+        </div>
+
+        <label for="crop-zoom">Масштаб</label>
+
+        <input
+            type="range"
+            id="crop-zoom"
+            min="1"
+            max="10"
+            step="0.1"
+            value="1"
+        >
+
+        <div class="crop-buttons">
+            <button type="button" id="crop-cancel">Отмена</button>
+            <button type="button" id="crop-confirm">Применить</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const nickname = document.getElementById('{{ form.nickname.id_for_label }}');
+    const fileInput = document.getElementById('{{ form.avatar.id_for_label }}');
+
+    const fileName = document.getElementById('avatar-file-name');
+    const clearButton = document.getElementById('clear-avatar-file');
+
+    const modal = document.getElementById('crop-modal');
+    const cropImage = document.getElementById('crop-image');
+    const zoomSlider = document.getElementById('crop-zoom');
+
+    const cancelButton = document.getElementById('crop-cancel');
+    const confirmButton = document.getElementById('crop-confirm');
+
+    let cropper = null;
+    let imageUrl = null;
+    let previousZoomValue = 1;
+
+    // Enter не отправляет форму из поля никнейма
+
+    nickname.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    // Выбор фотографии
+
+    fileInput.addEventListener('change', function () {
+
+        const file = fileInput.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        if (!file.type.startsWith('image/')) {
+            alert('Пожалуйста, выбери изображение.');
+            fileInput.value = '';
+            return;
+        }
+
+        if (typeof Cropper === 'undefined') {
+            alert('Не удалось загрузить инструмент обрезки. Проверь подключение к интернету.');
+            fileInput.value = '';
+            return;
+        }
+
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+
+        if (imageUrl) {
+            URL.revokeObjectURL(imageUrl);
+        }
+
+        imageUrl = URL.createObjectURL(file);
+
+        cropImage.onload = function () {
+
+            modal.hidden = false;
+
+            cropper = new Cropper(cropImage, {
+                aspectRatio: 1,
+                viewMode: 1,
+                dragMode: 'move',
+                autoCropArea: 0.8,
+                responsive: true,
+                background: false,
+                guides: false,
+                zoomOnWheel: false,
+                cropBoxMovable: false,
+                cropBoxResizable: false,
+
+                ready: function () {
+                    previousZoomValue = 1;
+                    zoomSlider.value = 1;   
+                }
+            });
+        };
+
+        cropImage.src = imageUrl;
+    });
+
+    // Масштабирование относительно начального размера
+
+    zoomSlider.addEventListener('input', function () {
+        if (!cropper) {
+            return;
+        }
+
+        const currentValue = Number(zoomSlider.value);
+        const difference = currentValue - previousZoomValue;
+
+        cropper.zoom(difference * 0.15);
+
+        previousZoomValue = currentValue;
+    });
+
+    // Закрытие окна обрезки
+
+    function closeCropModal() {
+
+        modal.hidden = true;
+
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+
+        if (imageUrl) {
+            URL.revokeObjectURL(imageUrl);
+            imageUrl = null;
+        }
+
+        cropImage.onload = null;
+        cropImage.removeAttribute('src');
+    }
+
+    // Отмена
+
+    cancelButton.addEventListener('click', function () {
+
+        fileInput.value = '';
+        fileName.textContent = 'Файл не выбран';
+        clearButton.hidden = true;
+
+        closeCropModal();
+    });
+
+    // Применение обрезки
+
+    confirmButton.addEventListener('click', function () {
+
+        if (!cropper) {
+            return;
+        }
+
+        const canvas = cropper.getCroppedCanvas({
+            width: 500,
+            height: 500,
+            imageSmoothingEnabled: true,
+            imageSmoothingQuality: 'high'
+        });
+
+        if (!canvas) {
+            alert('Не удалось обработать фотографию.');
+            return;
+        }
+
+        canvas.toBlob(function (blob) {
+
+            if (!blob) {
+                alert('Не удалось обработать фотографию.');
+                return;
+            }
+
+            const croppedFile = new File(
+                [blob],
+                'avatar.jpg',
+                { type: 'image/jpeg' }
+            );
+
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(croppedFile);
+
+            fileInput.files = dataTransfer.files;
+
+            fileName.textContent = croppedFile.name;
+            clearButton.hidden = false;
+
+            closeCropModal();
+
+        }, 'image/jpeg', 0.9);
+    });
+
+    // Очистка выбранного файла
+
+    clearButton.addEventListener('click', function () {
+
+        fileInput.value = '';
+        fileName.textContent = 'Файл не выбран';
+        clearButton.hidden = true;
+    });
+
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,364 @@
+.profile-page {
+    max-width: 900px;
+    margin: 54px auto 80px;
+    padding: 0 20px;
+}
+
+/* Заголовок */
+
+.profile-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.eyebrow {
+    color: #bd858c;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.profile-heading h1 {
+    color: #543c3a;
+    font-size: 36px;
+    margin: 0 0 12px;
+}
+
+.profile-heading > p:last-child {
+    color: #987e79;
+    font-size: 15px;
+}
+
+/* Карточка */
+
+.profile-card {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 35px 40px;
+    background: #fffaf7;
+    border: 1px solid #f0dfda;
+    border-radius: 24px;
+    box-shadow: 0 12px 35px rgba(100, 65, 55, 0.07);
+}
+
+/* Верхняя часть профиля */
+
+.profile-card__top {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.profile-avatar {
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #f8e5e4, #f5d6d5);
+    border: 4px solid #fff;
+    box-shadow: 0 3px 12px rgba(100, 65, 55, 0.12);
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-avatar img[hidden],
+.default-avatar[hidden] {
+    display: none;
+}
+
+.default-avatar {
+    color: #bd858c;
+    font-size: 58px;
+    font-weight: 400;
+}
+
+.profile-card__info h2 {
+    color: #543c3a;
+    font-size: 25px;
+    margin: 5px 0 8px;
+}
+
+.profile-card__info > p:last-child {
+    color: #987e79;
+    font-size: 14px;
+}
+
+/* Разделитель */
+
+.profile-divider {
+    height: 1px;
+    background: #f0dfda;
+    margin: 30px 0;
+}
+
+/* Форма */
+
+.profile-form h3 {
+    color: #543c3a;
+    font-size: 20px;
+    margin: 0 0 22px;
+}
+
+.profile-field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 22px;
+}
+
+.profile-field label {
+    color: #765954;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.profile-field input {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 46px;
+    padding: 11px 14px;
+    border: 1px solid #e8d5cf;
+    border-radius: 11px;
+    background: #fff;
+    color: #543c3a;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.profile-field input:focus {
+    border-color: #cf969b;
+    box-shadow: 0 0 0 3px rgba(207, 150, 155, 0.13);
+}
+
+.profile-field input[type="file"] {
+    padding: 9px;
+    cursor: pointer;
+}
+
+.profile-field ul {
+    color: #b65f67;
+    font-size: 12px;
+    padding-left: 18px;
+}
+
+/* Кнопка сохранения */
+
+.profile-save {
+    width: 100%;
+    min-height: 48px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 12px;
+    background: #c9828b;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.profile-save:hover {
+    background: #b96f79;
+    transform: translateY(-1px);
+}
+
+/* Ошибки */
+
+.profile-errors {
+    color: #b65f67;
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+
+/* Выход */
+
+.profile-footer {
+    text-align: center;
+}
+
+.profile-footer p {
+    color: #987e79;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.profile-logout {
+    padding: 11px 25px;
+    border: 1px solid #e5bfc0;
+    border-radius: 10px;
+    background: transparent;
+    color: #b96f79;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.profile-logout:hover {
+    background: #faeeee;
+}
+
+/* Мобильная версия */
+
+@media (max-width: 600px) {
+    .profile-page {
+        margin-top: 30px;
+        padding: 0 14px;
+    }
+
+    .profile-heading h1 {
+        font-size: 28px;
+    }
+
+    .profile-card {
+        padding: 25px 20px;
+    }
+
+    .profile-card__top {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-card__info h2 {
+        font-size: 22px;
+    }
+}
+
+/* Загрузка аватара */
+
+.avatar-file-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.avatar-file-row input[type="file"] {
+    max-width: 100%;
+}
+
+#avatar-file-name {
+    color: #987e79;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.avatar-trash,
+.avatar-delete {
+    border: 1px solid #e5bfc0;
+    border-radius: 10px;
+    background: #fff4f3;
+    color: #b96f79;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.avatar-trash {
+    font-size: 26px;
+    width: 40px;
+    height: 40px;
+}
+
+.avatar-trash:hover,
+.avatar-delete:hover {
+    background: #f9e1e1;
+}
+
+.avatar-delete {
+    padding: 9px 13px;
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+/* Окно обрезки */
+
+.crop-modal[hidden] {
+    display: none;
+}
+
+.crop-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(45, 30, 30, 0.65);
+}
+
+.crop-modal__content {
+    width: 100%;
+    max-width: 480px;
+    padding: 25px;
+    border-radius: 20px;
+    background: #fffaf7;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+.crop-modal__content h3 {
+    margin: 0 0 8px;
+    color: #543c3a;
+}
+
+.crop-modal__content p {
+    color: #987e79;
+    font-size: 13px;
+}
+
+.crop-container {
+    width: 100%;
+    height: 320px;
+    margin: 20px 0;
+    background: #f4e8e4;
+}
+
+.crop-container img {
+    display: block;
+    max-width: 100%;
+}
+
+.crop-modal__content label {
+    display: block;
+    margin-bottom: 10px;
+    color: #765954;
+    font-size: 13px;
+}
+
+#crop-zoom {
+    width: 100%;
+    accent-color: #c9828b;
+}
+
+.crop-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.crop-buttons button {
+    padding: 11px 18px;
+    border: 1px solid #e5bfc0;
+    border-radius: 10px;
+    background: #fff;
+    color: #b96f79;
+    cursor: pointer;
+}
+
+#crop-confirm {
+    background: #c9828b;
+    color: white;
+    border-color: #c9828b;
+}
+
